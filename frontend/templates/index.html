@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Preferences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6 flex justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+        <h2 class="text-2xl font-semibold text-center mb-4">Tell Us About Your Style</h2>
+        <form id="preferencesForm" class="space-y-4">
+            <label class="block">Preferred Colors:
+                <input type="text" name="color" class="w-full p-2 border rounded" placeholder="e.g., Black, Blue">
+            </label>
+
+            <label class="block">Favorite Fabric:
+                <input type="text" name="fabric" class="w-full p-2 border rounded" placeholder="e.g., Cotton, Denim">
+            </label>
+
+            <label class="block">Fit & Style:
+                <input type="text" name="fit_style" class="w-full p-2 border rounded" placeholder="e.g., Slim, Casual">
+            </label>
+
+            <label class="block">Personality Type:
+                <select name="personality" class="w-full p-2 border rounded">
+                    <option value="minimalist">Minimalist</option>
+                    <option value="bold">Bold</option>
+                    <option value="classic">Classic</option>
+                </select>
+            </label>
+
+            <label class="block">Accessories:
+                <input type="text" name="accessory" class="w-full p-2 border rounded" placeholder="e.g., Watch, Bracelet">
+            </label>
+
+            <label class="block">Preferred Occasions:
+                <input type="text" name="occasion" class="w-full p-2 border rounded" placeholder="e.g., Casual Outing, Formal">
+            </label>
+
+            <label class="block">Prioritize Practicality?
+                <input type="checkbox" name="practicality" class="ml-2">
+            </label>
+
+            <label class="block">Comfort Level:
+                <select name="comfort_level" class="w-full p-2 border rounded">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </label>
+
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("preferencesForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+            data.practicality = formData.has("practicality");
+
+            fetch("/submit-preferences", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => alert("Preferences saved successfully!"))
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>
