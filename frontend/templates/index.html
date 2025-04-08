@@ -75,6 +75,8 @@
             </label>
             <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit</button>
         </form>
+        <button id="generateOutfitButton" class="w-full bg-purple-500 text-white p-2 rounded hover:bg-purple-600 mt-4">Generate Outfit</button>
+        <div id="generatedOutfitContainer" class="w-full"></div>
         <button id="signOutButton" class="w-full bg-red-500 text-white p-2 rounded hover:bg-red-600 mt-4">Sign Out</button>
     </div>
 
@@ -185,6 +187,38 @@
             localStorage.removeItem("access_token"); // Clear the token
             alert("You have been signed out.");
             toggleForms(); // Redirect to signup form
+        });
+
+        document.getElementById("generateOutfitButton").addEventListener("click", function () {
+            const token = localStorage.getItem("access_token");
+            if (!token) {
+                alert("Please log in first!");
+                return;
+            }
+
+            fetch("/generate-outfit", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    // Create a card to display the generated image and prompt
+                    const cardContainer = document.getElementById("generatedOutfitContainer");
+                    cardContainer.innerHTML = `
+                        <div class="bg-white p-4 rounded-lg shadow-lg mt-6">
+                            <h3 class="text-xl font-semibold text-center mb-4">Generated Outfit</h3>
+                            <img src="${data.image}" alt="Generated Outfit" class="w-full rounded-lg shadow-md">
+                            <p class="text-gray-700 mt-4">${data.prompt}</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => console.error("Error:", error));
         });
 
         // Call toggleForms on page load

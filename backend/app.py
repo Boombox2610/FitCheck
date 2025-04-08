@@ -2,6 +2,12 @@ from flask import Flask, render_template, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from supabase import create_client, Client
 
+from google import genai
+from google.genai import types
+from PIL import Image
+from io import BytesIO
+import base64
+
 SUPABASE_URL = "https://chursupvkphjclbiaaky.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNodXJzdXB2a3BoamNsYmlhYWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1OTIyMTMsImV4cCI6MjA1OTE2ODIxM30.NvZT6GTK-hu7aUkD6l37Wo8jWK6LpdqNQqv2d6M4vg0"
 
@@ -71,6 +77,87 @@ def submit_preferences():
     }).execute()
 
     return jsonify({"message": "Preferences saved successfully!"})
+
+@app.route("/generate-outfit", methods=["POST"])
+@jwt_required()
+def generate_outfit():
+    user_id = get_jwt_identity()  # Get the logged-in user's ID
+
+    # Fetch user preferences
+    preferences = supabase.table("user_preferences").select("*").eq("user_id", user_id).execute().data
+    if not preferences:
+        return jsonify({"error": "User preferences not found"}), 404
+
+    # Extract preferences
+    preferences = preferences[0]
+    color = preferences.get("color", "beige")
+    fabric = preferences.get("fabric", "cotton")
+    fit_style = preferences.get("fit_style", "fit")
+    personality = preferences.get("personality", "casual")
+    accessory = preferences.get("accessory", "watch")
+    occasion = preferences.get("occasion", "casual")
+    practicality = "true" if preferences.get("practicality") else "false"
+    comfort_level = preferences.get("comfort_level", "high")
+
+    # Construct the prompt string
+    contents = (
+        f"Here are clothing user preferences: topwear of color {color}, and bottomwear complementing it. "
+        f"Fabric: {fabric}. Fit style: {fit_style}. Personality: {personality}. Accessory: {accessory}. "
+        f"Occasion: {occasion}. Practical: {practicality}. Comfort level: {comfort_level}. "
+        f"Generate only a detailed image prompt for this outfit, from top to bottom, including shoes, which is specific with no ors. "
+        f"The prompt should include: clothing be put on a light brown Indian male model with a plain background."
+    )
+
+    # Call Gemini API to generate the text prompt
+    client = genai.Client(api_key="AIzaSyAD9v7q_nHOrAaHzarJiRGJpiSc8tg13io")
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=contents
+    )
+
+    if not response or not response.text:
+        return jsonify({"error": "Failed to generate outfit prompt"}), 500
+
+    # Save the generated prompt to the database
+    prompt = response.text
+    db_response = supabase.table("outfits").insert({
+        "user_id": user_id,
+        "prompt": prompt,
+        "liked": False
+    }).execute()
+
+    if db_response.data is None:
+        return jsonify({"error": "Failed to save outfit data"}), 500
+
+    # Generate the image based on the prompt
+    image_contents = f"Generate only a professional image of {prompt} in a plain background, full body, head to toe."
+    image_response = client.models.generate_content(
+        model="gemini-2.0-flash-exp-image-generation",
+        contents=image_contents,
+        config=types.GenerateContentConfig(
+            response_modalities=['Text', 'Image']
+        )
+    )
+
+    if not image_response or not image_response.candidates:
+        return jsonify({"error": "Failed to generate outfit image"}), 500
+
+    # Extract the image data
+    for part in image_response.candidates[0].content.parts:
+        if part.inline_data is not None:
+            image_data = part.inline_data.data
+            image = Image.open(BytesIO(image_data))
+            image_base64 = base64.b64encode(image_data).decode('utf-8')  # Convert image to base64 for frontend display
+            break
+    else:
+        return jsonify({"error": "No image data found"}), 500
+
+    return jsonify({
+        "message": "Outfit generated successfully!",
+        "prompt": prompt,
+        "image": f"data:image/png;base64,{image_base64}"
+    }), 201
+
 
 @app.route("/", methods=["GET"])
 def home():
