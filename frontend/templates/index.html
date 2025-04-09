@@ -5,78 +5,199 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fashion Preferences</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: linear-gradient(180deg, #000000, #2b00ff);
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .glass-container:hover {
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+            
+        }
+
+        button {
+            background-color: #7357ff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #fcacff;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 p-6 flex justify-center">
+<body class="flex items-center justify-center min-h-screen">
     <!-------------- SIGN UP ------------------------->
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl mb-6" id="signupContainer">
+    <div class="glass-container w-full max-w-md" id="signupContainer">
         <h2 class="text-2xl font-semibold text-center mb-4">Sign Up</h2>
         <form id="signupForm" class="space-y-4">
-            <label class="block">Email:
-                <input type="email" name="email" class="w-full p-2 border rounded" required>
-            </label>
-            <label class="block">Password:
-                <input type="password" name="password" minlength="6" class="w-full p-2 border rounded" required>
-            </label>
-            <button type="submit" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">Sign Up</button>
+            <div class="flex flex-col-reverse ">
+                <input
+                  placeholder="Email Address"
+                  class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                  type="text" name="email" required
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                />
+                <span
+                  class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                  >Email Address</span
+                >
+            </div>
+            <div class="flex flex-col-reverse ">
+                <input
+                  placeholder="Password"
+                  class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                  type="password" name="password" required minlength="6"
+                />
+                <span
+                  class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                  >Password</span
+                >
+            </div>
+
+            <button type="submit" class="w-full p-2 rounded">Sign Up</button>
         </form>
-        <button id="switchToLogin" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mt-4">Already have an account? Log In</button>
+        <button id="switchToLogin" class="w-full p-2 rounded mt-4">Already have an account? Log In</button>
+
+        
     </div>
 
     <!-------------- LOG IN ------------------------->
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl mb-6" id="loginContainer" style="display: none;">
+    <div class="glass-container w-full max-w-md hidden" id="loginContainer">
         <h2 class="text-2xl font-semibold text-center mb-4">Log In</h2>
         <form id="loginForm" class="space-y-4">
-            <label class="block">Email:
-                <input type="email" name="email" class="w-full p-2 border rounded" required>
-            </label>
-            <label class="block">Password:
-                <input type="password" name="password" class="w-full p-2 border rounded" required>
-            </label>
-            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Log In</button>
+            <div class="flex flex-col-reverse ">
+                <input
+                  placeholder="Email Address"
+                  class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                  type="text" name="email" required
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                />
+                <span
+                  class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                  >Email Address</span
+                >
+            </div>
+
+            
+            <div class="flex flex-col-reverse ">
+                <input
+                  placeholder="Password"
+                  class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                  type="password" name="password" required minlength="6"
+                />
+                <span
+                  class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                  >Password</span
+                >
+            </div>
+            <button type="submit" class="w-full p-2 rounded">Log In</button>
         </form>
-        <button id="switchToSignup" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 mt-4">Don't have an account? Sign Up</button>
+        <button id="switchToSignup" class="w-full p-2 rounded mt-4">Don't have an account? Sign Up</button>
     </div>
 
     <!-------------- PREFERENCES ------------------------->
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl" id="preferencesContainer" style="display: none;">
-        <h2 class="text-2xl font-semibold text-center mb-4">Tell Us About Your Style</h2>
-        <form id="preferencesForm" class="space-y-4">
-            <label class="block">Preferred Colors:
-                <input type="text" name="color" class="w-full p-2 border rounded" placeholder="e.g., Black, Blue">
-            </label>
-            <label class="block">Favorite Fabric:
-                <input type="text" name="fabric" class="w-full p-2 border rounded" placeholder="e.g., Cotton, Denim">
-            </label>
-            <label class="block">Fit & Style:
-                <input type="text" name="fit_style" class="w-full p-2 border rounded" placeholder="e.g., Slim, Casual">
-            </label>
-            <label class="block">Personality Type:
-                <select name="personality" class="w-full p-2 border rounded">
-                    <option value="minimalist">Minimalist</option>
-                    <option value="bold">Bold</option>
-                    <option value="classic">Classic</option>
-                </select>
-            </label>
-            <label class="block">Accessories:
-                <input type="text" name="accessory" class="w-full p-2 border rounded" placeholder="e.g., Watch, Bracelet">
-            </label>
-            <label class="block">Preferred Occasions:
-                <input type="text" name="occasion" class="w-full p-2 border rounded" placeholder="e.g., Casual Outing, Formal">
-            </label>
-            <label class="block">Prioritize Practicality?
-                <input type="checkbox" name="practicality" class="ml-2">
-            </label>
-            <label class="block">Comfort Level:
-                <select name="comfort_level" class="w-full p-2 border rounded">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
-            </label>
-            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit</button>
-        </form>
-        <button id="generateOutfitButton" class="w-full bg-purple-500 text-white p-2 rounded hover:bg-purple-600 mt-4">Generate Outfit</button>
-        <div id="generatedOutfitContainer" class="w-full"></div>
+    <div class="glass-container w-full max-w-4xl hidden flex flex-col" id="preferencesContainer">
+        <!-- Preferences Form -->
+        <div class="w-full">
+            <h2 class="text-2xl font-semibold text-center mb-4">Tell Us About Your Style</h2>
+            <form id="preferencesForm" class="space-y-4">
+                <div class="flex flex-col-reverse">
+                    <input
+                      placeholder="Preferred Colors (e.g., Black, Blue)"
+                      class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                      type="text" name="color" required
+                    />
+                    <span
+                      class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                      >Preferred Colors</span>
+                </div>
+                <div class="flex flex-col-reverse">
+                    <input
+                      placeholder="Favorite Fabric (e.g., Cotton, Denim)"
+                      class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                      type="text" name="fabric" required
+                    />
+                    <span
+                      class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                      >Favorite Fabric</span>
+                </div>
+                <div class="flex flex-col-reverse">
+                    <input
+                      placeholder="Fit & Style (e.g., Slim, Casual)"
+                      class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                      type="text" name="fit_style" required
+                    />
+                    <span
+                      class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                      >Fit & Style</span>
+                </div>
+                <div class="flex flex-col-reverse">
+                    <input
+                      placeholder="Personality Type (e.g., Minimalist, Bold, Classic)"
+                      class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                      type="text" name="personality" required
+                    />
+                    <span
+                      class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                      >Personality Type</span>
+                </div>
+                <div class="flex flex-col-reverse">
+                    <input
+                      placeholder="Accessories (e.g., Watch, Bracelet)"
+                      class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                      type="text" name="accessory" required
+                    />
+                    <span
+                      class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                      >Accessories</span>
+                </div>
+                <div class="flex flex-col-reverse">
+                    <input
+                      placeholder="Preferred Occasions (e.g., Casual Outing, Formal)"
+                      class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                      type="text" name="occasion" required
+                    />
+                    <span
+                      class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                      >Preferred Occasions</span>
+                </div>
+                <div class="flex flex-col-reverse">
+                    <input
+                    placeholder="Comfort Level (e.g., Low, Medium, High)"
+                    class="relative bg-transparent h-12 px-4 py-1 text-xs border-0 rounded-lg shadow-xl outline-none peer ring ring-base-200 duration-500 focus:ring-2 focus:border-base-100 placeholder:duration-500 placeholder:absolute focus:placeholder:pt-10 shadow-base-400/10 focus:shadow-none focus:rounded-md focus:ring-blue-600 placeholder:text-base-500"
+                    type="text" name="comfort_level" required
+                    />
+
+                    <span
+                      class="mb-2 text-xs opacity-0 duration-500 peer-focus:opacity-100 text-base-500 -translate-y-1 peer-focus:translate-y-0"
+                      >Comfort Level</span>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" name="practicality" class="mr-2">
+                    <label class="text-sm text-white">Prioritize Practicality?</label>
+                </div>
+                <button type="submit" class="w-full p-2 rounded">Submit</button>
+            </form>
+            <button id="generateOutfitButton" class="w-full p-2 rounded mt-4">Generate Outfit</button>
+        </div>
+    
+        <!-- Generated Outfit -->
+        <div class="w-full flex items-center justify-center mt-6" id="generatedOutfitContainer">
+            <!-- The generated image will dynamically appear here -->
+        </div>
         <button id="signOutButton" class="w-full bg-red-500 text-white p-2 rounded hover:bg-red-600 mt-4">Sign Out</button>
     </div>
 
@@ -189,50 +310,50 @@
             toggleForms(); // Redirect to signup form
         });
 
-        document.getElementById("generateOutfitButton").addEventListener("click", function () {
-            const token = localStorage.getItem("access_token");
-            if (!token) {
-                alert("Please log in first!");
-                return;
+    document.getElementById("generateOutfitButton").addEventListener("click", function () {
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+            alert("Please log in first!");
+            return;
+        }
+
+        fetch("/generate-outfit", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
             }
-
-            fetch("/generate-outfit", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    // Create a card to display the generated image and prompt
-                    const cardContainer = document.getElementById("generatedOutfitContainer");
-                    cardContainer.innerHTML = `
-                        <div class="bg-white p-4 rounded-lg shadow-lg mt-6">
-                            <h3 class="text-xl font-semibold text-center mb-4">Generated Outfit</h3>
-                            <img src="${data.image}" alt="Generated Outfit" class="w-full rounded-lg shadow-md">
-                            <p class="text-gray-700 mt-4">${data.prompt}</p>
-                            <div class="flex justify-center mt-4">
-                                <button id="likeButton" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mr-2">Like</button>
-                                <button id="dislikeButton" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Dislike</button>
-                            </div>
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                // Dynamically insert the generated image and prompt into the container
+                const generatedOutfitContainer = document.getElementById("generatedOutfitContainer");
+                generatedOutfitContainer.innerHTML = `
+                    <div class="p-4 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-center mb-4">Generated Outfit</h3>
+                        <img src="${data.image}" alt="Generated Outfit" class="w-full rounded-lg shadow-md">
+                        <p class="text-white-700 mt-4">${data.prompt}</p>
+                        <div class="flex justify-center mt-4">
+                            <button id="likeButton" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mr-2">Like</button>
+                            <button id="dislikeButton" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Dislike</button>
                         </div>
-                    `;
+                    </div>
+                `;
 
-                    // Add event listeners for like and dislike buttons
-                    document.getElementById("likeButton").addEventListener("click", function () {
-                        updateLikeStatus(data.outfit_id, true, token);
-                    });
+                // Add event listeners for like and dislike buttons
+                document.getElementById("likeButton").addEventListener("click", function () {
+                    updateLikeStatus(data.outfit_id, true, token); // Pass `outfit_id` and `liked`
+                });
 
-                    document.getElementById("dislikeButton").addEventListener("click", function () {
-                        updateLikeStatus(data.outfit_id, false, token);
-                    });
-                }
-            })
-            .catch(error => console.error("Error:", error));
-        });
+                document.getElementById("dislikeButton").addEventListener("click", function () {
+                    updateLikeStatus(data.outfit_id, false, token); // Pass `outfit_id` and `liked`
+                });
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
 
         // Function to update like status
         function updateLikeStatus(outfitId, liked, token) {
@@ -242,7 +363,7 @@
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
-                body: JSON.stringify({ outfit_id: outfitId, liked: liked })
+                body: JSON.stringify({ outfit_id: outfitId, liked: liked }) // Ensure both `outfit_id` and `liked` are sent
             })
             .then(response => response.json())
             .then(data => {

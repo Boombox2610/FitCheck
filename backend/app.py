@@ -116,6 +116,7 @@ def generate_outfit():
     )
 
     if not response or not response.text:
+        print("Failed to generate text prompt")  # Debug log
         return jsonify({"error": "Failed to generate outfit prompt"}), 500
 
     # Save the generated prompt to the database
@@ -127,10 +128,13 @@ def generate_outfit():
     }).execute()
 
     if db_response.data is None:
+        print("Failed to save prompt to database")  # Debug log
         return jsonify({"error": "Failed to save outfit data"}), 500
 
     # Generate the image based on the prompt
     image_contents = f"Generate only a professional image of {prompt} in a plain background, full body, head to toe."
+    print(f"Image generation prompt: {image_contents}")  # Debug log
+
     image_response = client.models.generate_content(
         model="gemini-2.0-flash-exp-image-generation",
         contents=image_contents,
@@ -140,6 +144,7 @@ def generate_outfit():
     )
 
     if not image_response or not image_response.candidates:
+        print("Failed to generate image")  # Debug log
         return jsonify({"error": "Failed to generate outfit image"}), 500
 
     # Extract the image data
@@ -148,15 +153,43 @@ def generate_outfit():
             image_data = part.inline_data.data
             image = Image.open(BytesIO(image_data))
             image_base64 = base64.b64encode(image_data).decode('utf-8')  # Convert image to base64 for frontend display
+            print("Image generated successfully")  # Debug log
             break
     else:
+        print("No image data found in the response")  # Debug log
         return jsonify({"error": "No image data found"}), 500
 
     return jsonify({
         "message": "Outfit generated successfully!",
         "prompt": prompt,
-        "image": f"data:image/png;base64,{image_base64}"
+        "image": f"data:image/png;base64,{image_base64}",
+        "outfit_id": db_response.data[0]["id"]  # Include the outfit ID
     }), 201
+
+
+@app.route("/update-like-status", methods=["POST"])
+@jwt_required()
+def update_like_status():
+    user_id = get_jwt_identity()  # Get the logged-in user's ID
+    data = request.json
+    outfit_id = data.get("outfit_id")
+    liked = data.get("liked")  # Boolean: true for like, false for dislike
+
+    # Debug logs
+    print(f"User ID: {user_id}")
+    print(f"Outfit ID: {outfit_id}")
+    print(f"Liked: {liked}")
+
+    if outfit_id is None or liked is None:
+        return jsonify({"error": "Invalid request data"}), 400
+
+    # Update the `liked` field in the database
+    response = supabase.table("outfits").update({"liked": liked}).eq("id", outfit_id).eq("user_id", user_id).execute()
+
+    if response.data is None:
+        return jsonify({"error": "Failed to update like status"}), 500
+
+    return jsonify({"message": "Like status updated successfully!"}), 200
 
 
 @app.route("/", methods=["GET"])
