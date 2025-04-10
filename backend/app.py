@@ -133,6 +133,7 @@ def generate_outfit():
 
     # Generate the image based on the prompt
     image_contents = f"Generate only a professional image of {prompt} in a plain background, full body, head to toe."
+    
     print(f"Image generation prompt: {image_contents}")  # Debug log
 
     image_response = client.models.generate_content(
