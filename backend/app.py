@@ -37,6 +37,9 @@ def signup():
         "email": email
     }).execute()
 
+#     INSERT INTO users (id, email)
+# VALUES (<new_user_id>, <email>);
+
     return jsonify({"message": "User created successfully!"}), 201
 
 @app.route("/login", methods=["POST"])
@@ -78,6 +81,15 @@ def submit_preferences():
 
     return jsonify({"message": "Preferences saved successfully!"})
 
+# INSERT INTO user_preferences (
+#   user_id, color, fabric, fit_style, personality,
+#   accessory, occasion, practicality, comfort_level
+# )
+# VALUES (
+#   <user_id>, <color>, <fabric>, <fit_style>, <personality>,
+#   <accessory>, <occasion>, <practicality>, <comfort_level>
+# );
+
 @app.route("/generate-outfit", methods=["POST"])
 @jwt_required()
 def generate_outfit():
@@ -85,6 +97,11 @@ def generate_outfit():
 
     # Fetch user preferences
     preferences = supabase.table("user_preferences").select("*").eq("user_id", user_id).execute().data
+
+    # SELECT *
+    # FROM user_preferences
+    # WHERE user_id = <user_id>;
+
     if not preferences:
         return jsonify({"error": "User preferences not found"}), 404
 
@@ -126,6 +143,9 @@ def generate_outfit():
         "prompt": prompt,
         "liked": False
     }).execute()
+
+#     INSERT INTO outfits (user_id, prompt, liked)
+#       VALUES (<user_id>, <prompt>, false);
 
     if db_response.data is None:
         print("Failed to save prompt to database")  # Debug log
@@ -186,6 +206,10 @@ def update_like_status():
 
     # Update the `liked` field in the database
     response = supabase.table("outfits").update({"liked": liked}).eq("id", outfit_id).eq("user_id", user_id).execute()
+
+#     UPDATE outfits
+#       SET liked = <liked_value>
+#       WHERE id = <outfit_id> AND user_id = <user_id>;
 
     if response.data is None:
         return jsonify({"error": "Failed to update like status"}), 500
